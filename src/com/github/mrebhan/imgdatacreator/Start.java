@@ -134,6 +134,8 @@ public class Start {
 		    	s += buf + '\n';
 		    }
 		    s = s.replace("<REPLACE_HERE>", dataStr);
+		    if (out.exists())
+		    	out.delete();
 		    Files.write(out.toPath(), s.getBytes(), StandardOpenOption.CREATE);
 		} catch (IOException e) {
 			e.printStackTrace();
