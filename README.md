@@ -5,6 +5,7 @@ A image generator for the cursors.io webgame. Uses the "Cursor Jesus" hack.
 
 Instructions:
 
+Download imgdata.jar
 Run the program using `java -jar imgdata.jar <-v> <-h> <-iINFILE.PNG> <-oOUTFILE.TXT>`.
 The program creates the modded cursor jesus file.
 Press ctrl+shift+j in your browser and copy/paste the entire script into the command prompt console window.
