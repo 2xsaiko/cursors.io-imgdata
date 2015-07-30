@@ -1,9 +1,9 @@
 // Instructions: Go to cursors.io, open console (ctrl + j) and paste this entire script into the console.
 // To type: type message and hit enter
 // For marker mode: press *
-// To push all buttons on the map: hold ~
-// To draw a circle(ish) press -
-// To draw an image press +
+// To push all buttons on the map: hold 0
+// To draw a circle(ish) press ;
+// To draw an image press buttons 1, 2, 3, 4, 5, 6
 
 var A = window;
 var E = document;
@@ -32,7 +32,14 @@ var markerEnabled = false;
 var movementEnabled = true;
 
 var imageScale = 1.0;
-var imgData = [<REPLACE_HERE>];
+var wheel = [
+[<IMG_A>],
+[<IMG_B>],
+[<IMG_C>],
+[<IMG_D>],
+[<IMG_E>],
+[<IMG_F>]
+];
 
 var fontSize = 2;
 var letterOffset = 0;
@@ -199,6 +206,15 @@ alphabet[122] = [
     [0,0,0,2],
     [0,2,2,0],
     [2,0,2,2]
+];
+alphabet[47] = [
+    [0,2,2,0]
+];
+alphabet[45] = [
+    [1,0,1,2]
+];
+alphabet[46] = [
+    [1,0,2,0]
 ];
 
 
@@ -1200,7 +1216,7 @@ Array.prototype.remove = function(a) {
 };
 
 function handleKeyboard(e) {
-    if ((e.keyCode >= 97 && e.keyCode <= 122) || e.keyCode == 32 || e.keyCode == 63 || e.keyCode == 58 || e.keyCode == 40 || e.keyCode == 41) {
+    if ((e.keyCode >= 97 && e.keyCode <= 122) || e.keyCode == 32 || e.keyCode == 63 || e.keyCode == 58 || e.keyCode == 40 || e.keyCode == 41 || e.keyCode == 45 || e.keyCode == 46 || e.keyCode == 47) {
         message = message.concat(String.fromCharCode(e.keyCode));
         messageDisplay.innerHTML = message;
         return;
@@ -1212,17 +1228,32 @@ function handleKeyboard(e) {
             messageDisplay.innerHTML = message;
             e.preventDefault();
             break;
-        case 96: // Click all buttons
+        case 48: // Click all buttons
             clickAllButtons();
             break;
-        case 47:
+        case 126:
             movementEnabled = !movementEnabled
             break;
-        case 45: // Toggle Aura
+        case 59: // Toggle Aura
             auraEnabled = !auraEnabled;
             break;
-        case 43:
-            drawImage(posX, posY);
+        case 49:
+            drawImage(posX, posY, 0);
+            break;
+        case 50:
+            drawImage(posX, posY, 1);
+            break;
+        case 51:
+            drawImage(posX, posY, 2);
+            break;
+        case 52:
+            drawImage(posX, posY, 3);
+            break;
+        case 53:
+            drawImage(posX, posY, 4);
+            break;
+        case 54:
+            drawImage(posX, posY, 5);
             break;
         case 42:
             markerEnabled = !markerEnabled;
@@ -1264,10 +1295,12 @@ function radToDeg(rad) {
 }
 
 var drawIndex = 0;
-function drawImage(x, y) {
+function drawImage(x, y, c) {
     setTimeout(function () {
         var g = new ArrayBuffer(9),
             e = new DataView(g);
+
+        var imgData = wheel[c];
 
         e.setUint8(0, 3);
         e.setUint16(1, x+imgData[drawIndex][1]*imageScale, !0);
@@ -1278,7 +1311,7 @@ function drawImage(x, y) {
 
         drawIndex++;
         if (drawIndex < imgData.length)
-            drawImage(x, y);
+            drawImage(x, y, c);
         else
             drawIndex = 0;
     }, 15)
@@ -1320,7 +1353,7 @@ function drawWord(s, x, y) {
 }
 
 function doit() {
-    document.body.innerHTML += '<div id="messageDisplay"></div>';
+    document.body.innerHTML += '<div id="messageDisplay"></div><br><br>Controls:<br>0: press all buttons in the map<br>1-6: draw image<br>\;: draw circle<br>type a message and hit enter to chat';
     messageDisplay = document.getElementById("messageDisplay");
 
     y = E.getElementById("canvas");

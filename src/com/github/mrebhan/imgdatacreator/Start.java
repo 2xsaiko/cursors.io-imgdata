@@ -7,9 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -25,7 +23,12 @@ public class Start {
 		Options opt = new Options();
 		opt.addOption("h", "Horizontal tiling");
 		opt.addOption("v", "Vertical tiling");
-		opt.addOption("i", "in", true, "Input file (PNG/other supported formats)");
+		opt.addOption("1", "img1", true, "Input file 1 (PNG/other supported formats)");
+		opt.addOption("2", "img2", true, "Input file 2 (PNG/other supported formats)");
+		opt.addOption("3", "img3", true, "Input file 3 (PNG/other supported formats)");
+		opt.addOption("4", "img4", true, "Input file 4 (PNG/other supported formats)");
+		opt.addOption("5", "img5", true, "Input file 5 (PNG/other supported formats)");
+		opt.addOption("6", "img6", true, "Input file 6 (PNG/other supported formats)");
 		opt.addOption("o", "out", true, "Output file (Txt file)");
 		CommandLine line = null;
 		try {
@@ -44,10 +47,6 @@ public class Start {
 			System.err.println("Needs at least one of -h and -v");
 			System.exit(-1);
 		}
-		if (!line.hasOption('i')) {
-			System.err.println("Needs -i (Input file)");
-			System.exit(-1);
-		}
 		if (!line.hasOption('o')) {
 			System.err.println("Needs -o (Output file)");
 			System.exit(-1);
@@ -58,28 +57,63 @@ public class Start {
 			hor = true;
 		if (line.hasOption('v'))
 			ver = true;
-		in = new File(line.getOptionValue('i'));
 		out = new File(line.getOptionValue('o'));
 
-		if (!in.isFile()) {
-			System.err.println("Input file doesn't exist");
-			System.exit(-1);
+		String filecontents = "";
+
+		try {
+			InputStream str = Start.class.getClassLoader().getResourceAsStream("cursor_jesus.txt");
+			BufferedReader r = new BufferedReader(new InputStreamReader(str));
+			String buf = "";
+			while ((buf = r.readLine()) != null) {
+				filecontents += buf + '\n';
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		for (int i = 1; i < 7; i++) {
+			String imgStr = "<IMG_" + "ABCDEF".charAt(i - 1) + ">";
+			if (line.hasOption(Integer.toString(i).charAt(0))) {
+				in = new File(line.getOptionValue(Integer.toString(i).charAt(0)));
+				System.out.println("Processing image " + i + "...");
+				if (!in.isFile()) {
+					System.err.println("Input file doesn't exist");
+				}
+
+				String dataStr = convertImage(in, hor, ver);
+				filecontents = filecontents.replace(imgStr, dataStr);
+			} else {
+				System.out.println("Skipping image " + i + ".");
+				filecontents = filecontents.replace(imgStr, "[0, 0, 0, 0]");
+			}
 		}
 
 		try {
-			BufferedImage img = ImageIO.read(in);
-			ArrayList<String> data = new ArrayList<String>();
+			if (out.exists())
+				out.delete();
+			Files.write(out.toPath(), filecontents.getBytes(), StandardOpenOption.CREATE);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private static String convertImage(File in, boolean hor, boolean ver) {
+		BufferedImage img;
+		try {
+			img = ImageIO.read(in);
 			String dataStr = "";
 			if (hor) {
 				int lX = -1;
 				int mX = -1;
 				for (int y = 0; y < img.getHeight(); y++) {
 					for (int x = 0; x < img.getWidth(); x++) {
-						int r = img.getColorModel().getRed(img.getRaster().getDataElements(x, y, null));
-						int g = img.getColorModel().getGreen(img.getRaster().getDataElements(x, y, null));
-						int b = img.getColorModel().getBlue(img.getRaster().getDataElements(x, y, null));
+						float r = img.getColorModel().getRed(img.getRaster().getDataElements(x, y, null));
+						float g = img.getColorModel().getGreen(img.getRaster().getDataElements(x, y, null));
+						float b = img.getColorModel().getBlue(img.getRaster().getDataElements(x, y, null));
 
-						int comp = r+g+b/3;
+						float comp = r + g + b / 3f;
 						int bn = 128;
 
 						if (comp < bn) {
@@ -103,11 +137,11 @@ public class Start {
 				int mY = -1;
 				for (int x = 0; x < img.getWidth(); x++) {
 					for (int y = 0; y < img.getHeight(); y++) {
-						int r = img.getColorModel().getRed(img.getRaster().getDataElements(x, y, null));
-						int g = img.getColorModel().getGreen(img.getRaster().getDataElements(x, y, null));
-						int b = img.getColorModel().getBlue(img.getRaster().getDataElements(x, y, null));
+						float r = img.getColorModel().getRed(img.getRaster().getDataElements(x, y, null));
+						float g = img.getColorModel().getGreen(img.getRaster().getDataElements(x, y, null));
+						float b = img.getColorModel().getBlue(img.getRaster().getDataElements(x, y, null));
 
-						int comp = r+g+b/3;
+						float comp = r + g + b / 3f;
 						int bn = 128;
 
 						if (comp < bn) {
@@ -126,21 +160,11 @@ public class Start {
 					mY = -1;
 				}
 			}
-			InputStream str = Start.class.getClassLoader().getResourceAsStream("cursor_jesus.txt");
-		    BufferedReader r = new BufferedReader(new InputStreamReader(str));
-		    String s = "";
-		    String buf = "";
-		    while ((buf = r.readLine()) != null) {
-		    	s += buf + '\n';
-		    }
-		    s = s.replace("<REPLACE_HERE>", dataStr);
-		    if (out.exists())
-		    	out.delete();
-		    Files.write(out.toPath(), s.getBytes(), StandardOpenOption.CREATE);
+			return dataStr;
 		} catch (IOException e) {
 			e.printStackTrace();
+			return "";
 		}
-
 	}
 
 }
