@@ -64,7 +64,7 @@ public class Start {
 			String filecontents = "";
 
 			try {
-				InputStream str = Start.class.getClassLoader().getResourceAsStream("/cursor_jesus.txt");
+				InputStream str = Start.class.getResourceAsStream("/cursor_jesus.txt");
 				BufferedReader r = new BufferedReader(new InputStreamReader(str));
 				String buf = "";
 				while ((buf = r.readLine()) != null) {
