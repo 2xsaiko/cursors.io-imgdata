@@ -9,7 +9,7 @@ Download imgdata.jar and execute it for a GUI.
 
 Or, you can use the command line options:
 
-`java -jar imgdata.jar <-v> <-h> [-1IMG1.PNG] [-2IMG1.PNG] [-3IMG1.PNG] [-4IMG1.PNG] [-5IMG1.PNG] [-6IMG1.PNG] <-oOUTFILE.TXT>`.
+`java -jar imgdata.jar <-v> <-h> [-1IMG.PNG] [-2IMG.PNG] [-3IMG.PNG] [-4IMG.PNG] [-5IMG.PNG] [-6IMG.PNG] <-oOUTFILE.TXT>`.
 
 The program creates the modded cursor jesus file.<br>
 Press ctrl+shift+j in your browser and copy/paste the entire script into the command prompt console window.<br>
