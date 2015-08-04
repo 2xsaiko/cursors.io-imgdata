@@ -3,7 +3,7 @@ cursors.io-imgdata
 
 A image generator for the cursors.io webgame. Uses the "Cursor Jesus" hack.
 
-#Instructions:
+##Instructions:
 
 Download imgdata.jar and execute it for a GUI.
 
