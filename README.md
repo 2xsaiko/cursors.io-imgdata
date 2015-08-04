@@ -23,6 +23,6 @@ Options:
 
 -h: horizontal bars
 
--1...6: Input file(s) (Best: PNG format, black and white, 256x256-ish size), These input files are OPTIONAL!
+-1...6: Input file(s) (Best: PNG format, black and white, 128x128-ish size), These input files are OPTIONAL!
 
 -o: Output file
