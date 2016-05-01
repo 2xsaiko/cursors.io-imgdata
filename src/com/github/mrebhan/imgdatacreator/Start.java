@@ -25,6 +25,7 @@ public class Start {
 			Options opt = new Options();
 			opt.addOption("h", "Horizontal tiling");
 			opt.addOption("v", "Vertical tiling");
+			opt.addOption("r", "Randomize image drawing");
 			opt.addOption("1", "img1", true, "Input file 1 (PNG/other supported formats)");
 			opt.addOption("2", "img2", true, "Input file 2 (PNG/other supported formats)");
 			opt.addOption("3", "img3", true, "Input file 3 (PNG/other supported formats)");
@@ -42,6 +43,7 @@ public class Start {
 
 			boolean hor = false;
 			boolean ver = false;
+			boolean random = false;
 			File in = null;
 			File out = null;
 
@@ -59,6 +61,8 @@ public class Start {
 				hor = true;
 			if (line.hasOption('v'))
 				ver = true;
+			if (line.hasOption('r'))
+				random = true;
 			out = new File(line.getOptionValue('o'));
 
 			String filecontents = "";
@@ -83,7 +87,7 @@ public class Start {
 						System.err.println("Input file doesn't exist");
 					}
 
-					String dataStr = Tools.convertImage(in, hor, ver);
+					String dataStr = Tools.convertImage(in, hor, ver, random);
 					filecontents = filecontents.replace(imgStr, dataStr);
 				} else {
 					System.out.println("Skipping image " + i + ".");

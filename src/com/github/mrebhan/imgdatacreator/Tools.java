@@ -3,16 +3,18 @@ package com.github.mrebhan.imgdatacreator;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
 public class Tools {
 
-	public static String convertImage(File in, boolean hor, boolean ver) {
+	public static String convertImage(File in, boolean hor, boolean ver, boolean random) {
 		BufferedImage img;
 		try {
 			img = ImageIO.read(in);
-			String dataStr = "";
+			ArrayList<String> data = new ArrayList<>();
 			if (hor) {
 				int lX = -1;
 				int mX = -1;
@@ -31,7 +33,7 @@ public class Tools {
 							mX = x;
 						} else {
 							if (lX != -1 && mX != -1) {
-								dataStr += "[" + y + ", " + lX + ", " + y + ", " + mX + "],\n";
+								data.add("[" + y + ", " + lX + ", " + y + ", " + mX + "],\n");
 							}
 							lX = -1;
 							mX = -1;
@@ -59,7 +61,7 @@ public class Tools {
 							mY = y;
 						} else {
 							if (lY != -1 && mY != -1) {
-								dataStr += "[" + lY + ", " + x + ", " + mY + ", " + x + "],\n";
+								data.add("[" + lY + ", " + x + ", " + mY + ", " + x + "],\n");
 							}
 							lY = -1;
 							mY = -1;
@@ -67,6 +69,20 @@ public class Tools {
 					}
 					lY = -1;
 					mY = -1;
+				}
+			}
+			String dataStr = "";
+			if (random) {
+				Random r = new Random();
+				while (data.size() > 1) {
+					int index = r.nextInt(data.size() - 1);
+					dataStr += data.get(index);
+					data.remove(index);
+				}
+				dataStr += data.get(0);
+			} else {
+				for (String string : data) {
+					dataStr += string;
 				}
 			}
 			return dataStr;

@@ -1314,7 +1314,7 @@ function drawImage(x, y, c) {
             drawImage(x, y, c);
         else
             drawIndex = 0;
-    }, 15)
+    }, 5)
 }
 
 function drawLetter(a, x, y) {

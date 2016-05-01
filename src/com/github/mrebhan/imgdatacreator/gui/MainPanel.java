@@ -22,6 +22,7 @@ public class MainPanel extends JPanel {
 	private FileSelector fileSelector;
 	private JCheckBox vertical;
 	private JCheckBox horizontal;
+	private JCheckBox random;
 	private JPanel middlePanel;
 	
 	public MainPanel(MainFrame mainFrame) {
@@ -38,6 +39,7 @@ public class MainPanel extends JPanel {
 		this.fileSelector = new FileSelector("Output:");
 		this.vertical = new JCheckBox("Vertical lines");
 		this.horizontal = new JCheckBox("Horizontal lines");
+		this.random = new JCheckBox("Randomize lines");
 		this.middlePanel = new JPanel();
 		init();
 	}
@@ -52,6 +54,7 @@ public class MainPanel extends JPanel {
 //		this.horizontal.setLocation(1, 1);
 		this.middlePanel.add(this.vertical);
 //		this.vertical.setLocation(1, 21);
+		this.middlePanel.add(this.random);
 		this.add(this.middlePanel, BorderLayout.CENTER);
 	}
 	
@@ -77,6 +80,10 @@ public class MainPanel extends JPanel {
 	
 	public boolean vertical() {
 		return vertical.isSelected();
+	}
+	
+	public boolean random() {
+		return random.isSelected();
 	}
 	
 	public Path getOutputFile() {

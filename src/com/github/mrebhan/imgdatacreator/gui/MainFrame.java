@@ -86,6 +86,7 @@ public class MainFrame extends JFrame {
 		this.mainPanel.setEnabled(false);
 		boolean horizontal = mainPanel.horizontal();
 		boolean vertical = mainPanel.vertical();
+		boolean random = mainPanel.random();
 		
 		if (!(horizontal || vertical)) {
 			this.showDialog("Error", "At least one of:\n   ·Horizontal\n   ·Vertical\n is required.", JOptionPane.ERROR_MESSAGE);
@@ -134,7 +135,7 @@ public class MainFrame extends JFrame {
 			if (!path.toFile().isFile()) {
 				errors += "Could not find file " + path.toAbsolutePath().toString() + ". Skipping.\n";
 			} else {
-				String tex = Tools.convertImage(path.toFile(), horizontal, vertical);
+				String tex = Tools.convertImage(path.toFile(), horizontal, vertical, random);
 				if (tex.equals("")) {
 					errors += "Error while loading file " + path.toAbsolutePath().toString() + ". Invalid or empty image.";
 				} else {
